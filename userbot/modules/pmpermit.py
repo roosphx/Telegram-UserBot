@@ -27,9 +27,9 @@ from userbot.events import register
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = ("`Hey! Bu bir bot. Endişelenme.\n\n`"
-                  "`Sahibim sana PM atma izni vermedi. `"
-                  "`Lütfen sahibimin aktif olmasını bekleyin, o genellikle PM'leri onaylar.\n\n`"
-                  "`Bildiğim kadarıyla o kafayı yemiş insanlara PM izni vermiyor.`")
+                  "`Sahibim sana mesaj atma izni vermedi. `"
+                  "`Sahibimin aktif olmasını bekleyin, görüğünde muhtemelen mesaj atmanıza izin verecektir.\n\n`"
+                  "`Eğer size izin vermeden 4 kereden fazla mesaj yazarsanız otomatik olarak engellenirsiniz!`")
 # =================================================================
 
 
@@ -77,8 +77,8 @@ async def permitpm(event):
 
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond(
-                        "`Sen benim sahibimin PM'ini spamlıyorsun, bu benim hoşuma gitmiyor.`\n"
-                        "`Şu an ENGELLENDIN ve SPAM olarak bildirildin, ileride değişiklik olmadığı sürece..`"
+                        "`Sahibim henüz sana izin vermedi ama sen 4 mesajdan fazlasını gönderdin.`\n"
+                        "`Şu an engellendin. Kurallara uymalıydın.`"
                     )
 
                     try:
@@ -191,10 +191,10 @@ async def approvepm(apprvpm):
     try:
         approve(uid)
     except IntegrityError:
-        await apprvpm.edit("`Kullanıcı halihazırda PM gönderebiliyor olmalıdır.`")
+        await apprvpm.edit("`Kullanıcıya zaten mesaj atma izni verdin.`")
         return
 
-    await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `kişisi PM gönderebilir!`")
+    await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `kişisi mesaj gönderebilir!`")
 
     async for message in apprvpm.client.iter_messages(apprvpm.chat_id,
                                                       from_user='me',
@@ -228,7 +228,7 @@ async def disapprovepm(disapprvpm):
         name0 = str(aname.first_name)
 
     await disapprvpm.edit(
-        f"[{name0}](tg://user?id={disapprvpm.chat_id}) `kişisinin PM atma izni kaldırıldı.`")
+        f"[{name0}](tg://user?id={disapprvpm.chat_id}) `kişisinin mesaj atma izni kaldırıldı.`")
 
     if BOTLOG:
         await disapprvpm.client.send_message(
